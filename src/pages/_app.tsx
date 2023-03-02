@@ -3,11 +3,11 @@ import Head from "next/head";
 import { ThemeProvider } from "styled-components";
 import { theme, GlobalStyles } from "styles";
 import { Header, Footer } from "collections";
-import TagManager from "react-gtm-module";
-import { configureChains, createClient, goerli, WagmiConfig } from "wagmi";
+import { configureChains, createClient, goerli, mainnet, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { SessionProvider } from "next-auth/react";
+import { authAxios } from "services";
 
 const tagManagerArgs = {
   gtmId: "GTM-XXXXXXX"
@@ -20,10 +20,23 @@ interface AppProps {
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
-    // TagManager.initialize(tagManagerArgs);
+    document.addEventListener(
+      "visibilitychange",
+      authAxios.POST.token.renewJwtOnWindowVisibilityChange
+    );
+    authAxios.POST.token.autoRefreshJwtToken();
+    return () => {
+      document.removeEventListener(
+        "visibilitychange",
+        authAxios.POST.token.renewJwtOnWindowVisibilityChange
+      );
+    };
   }, []);
 
-  const { chains, provider, webSocketProvider } = configureChains([goerli], [publicProvider()]);
+  const { chains, provider, webSocketProvider } = configureChains(
+    [goerli, mainnet],
+    [publicProvider()]
+  );
 
   const client = createClient({
     autoConnect: true,

@@ -6,7 +6,7 @@ const nextConfig = {
   images: {
     domains: ["https://www.publishersweekly.com"]
   },
-  trailingSlash: true
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;

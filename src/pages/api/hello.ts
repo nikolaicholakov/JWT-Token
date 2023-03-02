@@ -3,13 +3,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { helloSchema } from "schemas";
 import { ApiResponseBase } from "types";
 import { getToken, JWT } from "next-auth/jwt";
+import { verify, decode, JwtPayload } from "jsonwebtoken";
 
 export interface HelloRequest extends NextApiRequest {
   body: { userName: string };
 }
 
 export interface HelloResponse {
-  message: JWT | null;
+  message: string;
+  data?: string | JwtPayload | null;
 }
 
 const handler = nc<HelloRequest, NextApiResponse<ApiResponseBase<HelloResponse>>>({
@@ -21,11 +23,18 @@ const handler = nc<HelloRequest, NextApiResponse<ApiResponseBase<HelloResponse>>
   onNoMatch: (req, res) => {
     res.status(404).end("Page not found");
   }
-}).post(async (req, res) => {
-  const token = await getToken({ req });
-  console.log("token => ", token);
+}).get(async (req, res) => {
+  try {
+    const token = req.cookies["jwt-auth"] as string;
+    console.log("token => ", token);
+    const decodedJWT = decode(token);
+    console.log("decodedJWT => ", decodedJWT);
 
-  return res.status(200).json({ message: token });
+    return res.status(200).json({ message: "You are In", data: decodedJWT });
+  } catch (error) {
+    console.log("error => ", error);
+    return res.status(401).json({ message: "You are NOT authorised" });
+  }
 });
 
 export default handler;

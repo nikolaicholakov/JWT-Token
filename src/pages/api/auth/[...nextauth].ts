@@ -62,8 +62,9 @@ export const authOptions: NextAuthOptions = {
   //   async encode({ secret, token }) {
   //     if (!token || !secret) return null;
   //     try {
-  //       const encodedToken = jwt.sign(token, secret, { algorithm: "HS512" });
-  //       return encodedToken;
+  //       const j = jwt.sign(token, secret);
+  //       console.log("encoding => ", j);
+  //       return jwt.sign(token, secret);
   //     } catch (error: any) {
   //       console.log("encoding Error => ", error);
   //       return null;
@@ -72,9 +73,9 @@ export const authOptions: NextAuthOptions = {
   //   async decode({ secret, token }) {
   //     if (!token || !secret) return null;
   //     try {
-  //       const decodedToken = jwt.verify(token, secret, { algorithms: ["HS512"] });
-  //       console.log("decodedToken", decodedToken);
-  //       return decodedToken;
+  //       const j = jwt.verify(token, secret);
+  //       console.log("decoding => ", j);
+  //       return jwt.verify(token, secret);
   //     } catch (error: any) {
   //       console.log("decoding Error => ", error);
   //       return null;
