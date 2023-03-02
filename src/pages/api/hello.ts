@@ -1,8 +1,6 @@
 import nc from "next-connect";
 import { NextApiRequest, NextApiResponse } from "next";
-import { helloSchema } from "schemas";
 import { ApiResponseBase } from "types";
-import { getToken, JWT } from "next-auth/jwt";
 import { verify, decode, JwtPayload } from "jsonwebtoken";
 
 export interface HelloRequest extends NextApiRequest {

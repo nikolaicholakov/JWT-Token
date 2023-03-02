@@ -6,7 +6,6 @@ import { Header, Footer } from "collections";
 import { configureChains, createClient, goerli, mainnet, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { SessionProvider } from "next-auth/react";
 import { authAxios } from "services";
 
 const tagManagerArgs = {
@@ -20,11 +19,14 @@ interface AppProps {
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
+    // initilizes the refresh token timeout
+    authAxios.POST.token.autoRefreshJwtToken();
+
+    // adds a listener to renew the jwt token when window tab is visible again
     document.addEventListener(
       "visibilitychange",
       authAxios.POST.token.renewJwtOnWindowVisibilityChange
     );
-    authAxios.POST.token.autoRefreshJwtToken();
     return () => {
       document.removeEventListener(
         "visibilitychange",
@@ -57,11 +59,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       </Head>
       <GlobalStyles />
       <WagmiConfig client={client}>
-        <SessionProvider session={session}>
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-        </SessionProvider>
+        <Header />
+        <Component {...pageProps} />
+        <Footer />
       </WagmiConfig>
     </ThemeProvider>
   );

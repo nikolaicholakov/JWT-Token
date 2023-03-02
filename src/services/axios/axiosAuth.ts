@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { decode, JwtPayload } from "jsonwebtoken";
 import { Cookie } from "universal-cookie/cjs/types";
-import { formatToSeconds, formatToMSForSetInterval } from "types";
+import { formatToSeconds, formatToMSForSetInterval } from "utils";
 
 const cookies = new Cookies();
 
@@ -36,6 +36,7 @@ const autoRefreshJwtToken = async () => {
         const currentDate = formatToSeconds(Date.now() / 1000);
         const expDate = formatToSeconds(decodedJWT.exp);
         const ms = formatToMSForSetInterval(expDate, currentDate);
+        // -5000 to make sure the token is renewed before it expires
         setTimeout(autoRenewJwtToken, ms - 5000);
       }
     }
@@ -112,7 +113,8 @@ const renewJWT = async () => {
     }
     return data;
   } catch (error: any) {
-    console.log(error);
+    const Error = error.response.data;
+    console.log(Error);
     return null;
   }
 };

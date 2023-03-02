@@ -38,3 +38,28 @@ export const shallowReplaceQuery = (
     { shallow: true }
   );
 };
+
+export const formatToSeconds = unixSeconds => {
+  const secondsPerMinute = 60;
+  const secondsPerHour = secondsPerMinute * 60;
+  const secondsPerDay = secondsPerHour * 24;
+
+  const days = Math.floor(unixSeconds / secondsPerDay);
+  unixSeconds %= secondsPerDay;
+
+  const hours = Math.floor(unixSeconds / secondsPerHour);
+  unixSeconds %= secondsPerHour;
+
+  const minutes = Math.floor(unixSeconds / secondsPerMinute);
+  unixSeconds %= secondsPerMinute;
+
+  const seconds = unixSeconds;
+
+  return hours * secondsPerHour + minutes * secondsPerMinute + seconds;
+};
+
+export const formatToMSForSetInterval = (expiry, currentData) => {
+  expiry = expiry * 1000;
+  currentData = currentData * 1000;
+  return expiry - currentData;
+};

@@ -32,7 +32,7 @@ export const Hero: React.FC<HeroProps> = ({ ...props }) => {
   };
 
   const renewToken = async () => {
-    if (!jwtCookie) return alert("No jwt in cookies");
+    if (!jwtCookie) return alert("No jwt in cookies. You may need to refresh the page");
     try {
       const renewedJwt = await authAxios.POST.token.renewJWT();
     } catch (error: any) {
