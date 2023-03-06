@@ -1,3 +1,7 @@
 {
-    "Welcome to React": "Welcome to React and react-i18next"
+    "title": "Hello World!",
+    "description": {
+        "one": "React 18 en from home.json",
+        "two": "React 18 2 en from home.json"
+      }
 }

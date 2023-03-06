@@ -1,0 +1,8 @@
+{
+    "title": "Welcome to react using react-i18next",
+    "description": {
+        "one": "React 18 english",
+        "two": "React 18 2 english"
+      }
+    
+  }

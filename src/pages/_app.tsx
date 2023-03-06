@@ -10,11 +10,15 @@ import { authAxios } from "services";
 import { storyblokInit, apiPlugin } from "@storyblok/react";
 
 // i18n imports
-// import i18n from "i18next";
-// import { initReactI18next } from "react-i18next";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import Backend from "i18next-http-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 
-// const bgLocales = require("locales/bg/home.json");
-// const enLocales = require("locales/en/home.json");
+const bgLocales = require("locales/bg/translation.json");
+const enLocales = require("locales/en/translation.json");
+const enOne = require("locales/en/home.json");
+const bgOne = require("locales/bg/home.json");
 // i18n imports
 
 const tagManagerArgs = {
@@ -59,22 +63,28 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   });
 
   // Inerationalization Init
-  // i18n.use(initReactI18next).init({
-  //   resources: {
-  //     en: {
-  //       translation: enLocales
-  //     },
-  //     bg: {
-  //       translation: bgLocales
-  //     }
-  //   },
-  //   lng: "en", // if you're using a language detector, do not define the lng option
-  //   fallbackLng: "en",
+  i18n
+    .use(initReactI18next)
+    .use(Backend)
+    .use(LanguageDetector)
+    .init({
+      debug: true,
+      resources: {
+        en: {
+          translation: enLocales,
+          one: enOne
+        },
+        bg: {
+          translation: bgLocales,
+          one: bgOne
+        }
+      },
+      fallbackLng: "en",
 
-  //   interpolation: {
-  //     escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-  //   }
-  // });
+      interpolation: {
+        escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+      }
+    });
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,3 +1,7 @@
 {
-    "Welcome to React": "Добре дошли в React и react-i18next"
+    "title": "Zdraveite ot Bulgaria",
+     "description": {
+        "one": "React 18 bg from home.json",
+        "two": "React 18 2 bg from home.json"
+      }
 }
