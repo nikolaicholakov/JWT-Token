@@ -7,17 +7,21 @@ import { configureChains, createClient, goerli, mainnet, WagmiConfig } from "wag
 import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { authAxios } from "services";
+import { storyblokInit, apiPlugin } from "@storyblok/react";
+
+// i18n imports
+// import i18n from "i18next";
+// import { initReactI18next } from "react-i18next";
+
+// const bgLocales = require("locales/bg/home.json");
+// const enLocales = require("locales/en/home.json");
+// i18n imports
 
 const tagManagerArgs = {
   gtmId: "GTM-XXXXXXX"
 };
 
-interface AppProps {
-  Component: React.FC;
-  pageProps: any;
-}
-
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   useEffect(() => {
     // initilizes the refresh token timeout
     authAxios.POST.token.autoRefreshJwtToken();
@@ -35,6 +39,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     };
   }, []);
 
+  // MetaMask Connection Using Wagmi Init
   const { chains, provider, webSocketProvider } = configureChains(
     [goerli, mainnet],
     [publicProvider()]
@@ -46,6 +51,30 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     provider,
     webSocketProvider
   });
+
+  // Content Managment StoryBlok Init
+  storyblokInit({
+    accessToken: process?.env?.NEXT_PUBLIC_STORYBLOK_PREVIEW_API_KEY,
+    use: [apiPlugin]
+  });
+
+  // Inerationalization Init
+  // i18n.use(initReactI18next).init({
+  //   resources: {
+  //     en: {
+  //       translation: enLocales
+  //     },
+  //     bg: {
+  //       translation: bgLocales
+  //     }
+  //   },
+  //   lng: "en", // if you're using a language detector, do not define the lng option
+  //   fallbackLng: "en",
+
+  //   interpolation: {
+  //     escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+  //   }
+  // });
 
   return (
     <ThemeProvider theme={theme}>

@@ -100,6 +100,8 @@ const loginWithWalletAndSignature = async (wallet: string, signature: string, me
 
 const renewJWT = async () => {
   const renewEndPoint = `/renew/wallet`;
+  const jwt = cookies.get("jwt-auth");
+  if (!jwt) return null;
   try {
     const { data } = await axiosAuthBase.post(renewEndPoint);
     if (data.jwt) {
